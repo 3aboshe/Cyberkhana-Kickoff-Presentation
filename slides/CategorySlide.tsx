@@ -378,6 +378,11 @@ const MalwareVisual = () => {
 const IRVisual = () => {
     return (
         <div className="relative w-64 h-32 flex items-center justify-center overflow-hidden">
+             {/* Center Shield Icon */}
+             <div className="relative z-10 w-16 h-16 bg-blue-600 rounded-lg flex items-center justify-center border-2 border-blue-400">
+                <ShieldAlert size={32} className="text-white" />
+             </div>
+             
              {/* Particles */}
              {Array.from({length: 5}).map((_, i) => (
                  <motion.div 
