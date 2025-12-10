@@ -25,8 +25,11 @@ export const SectionOverviewSlide: React.FC<SectionOverviewSlideProps> = ({ team
             <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
+                animate={{ opacity: 1, y: [0, -5, 0] }}
+                transition={{ 
+                    opacity: { duration: 0.5, delay: i * 0.1 },
+                    y: { duration: 4, repeat: Infinity, ease: "easeInOut", delay: i * 0.1 }
+                }}
                 className={`bg-[#0a0a0a] border border-gray-800 p-6 rounded-xl hover:border-${team === 'red' ? 'red-500' : 'cyan-500'} group transition-all`}
                 dir="rtl"
             >

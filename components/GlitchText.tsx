@@ -50,9 +50,9 @@ const GlitchText: React.FC<GlitchTextProps> = ({
         }}
         transition={{
           repeat: Infinity,
-          duration: 0.2,
+          duration: 2,
           repeatType: "mirror",
-          repeatDelay: 3
+          ease: "easeInOut"
         }}
       >
         {text}
@@ -65,8 +65,8 @@ const GlitchText: React.FC<GlitchTextProps> = ({
         }}
         transition={{
           repeat: Infinity,
-          duration: 0.1,
-          repeatDelay: 5
+          duration: 0.5,
+          repeatType: "reverse"
         }}
       >
         {text}

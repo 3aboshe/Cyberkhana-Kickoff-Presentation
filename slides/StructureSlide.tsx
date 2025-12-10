@@ -17,9 +17,13 @@ export const StructureSlide: React.FC<SlideProps> = () => {
         
         {/* Theory Card */}
         <motion.div 
-          initial={{ opacity: 0, x: 50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.2 }}
+          initial={{ opacity: 0, x: 50, y: 0 }}
+          animate={{ opacity: 1, x: 0, y: [0, -10, 0] }}
+          transition={{ 
+              opacity: { duration: 0.5, delay: 0.2 },
+              x: { duration: 0.5, delay: 0.2 },
+              y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.2 }
+          }}
           className="flex-1 bg-gradient-to-bl from-gray-900 to-black border border-gray-800 p-8 rounded-2xl relative overflow-hidden group hover:border-blue-500/50 transition-colors"
         >
           <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-30 transition-opacity">
@@ -47,9 +51,13 @@ export const StructureSlide: React.FC<SlideProps> = () => {
 
         {/* Practical Card */}
         <motion.div 
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.4 }}
+          initial={{ opacity: 0, x: -50, y: 0 }}
+          animate={{ opacity: 1, x: 0, y: [0, -10, 0] }}
+          transition={{ 
+              opacity: { duration: 0.5, delay: 0.4 },
+              x: { duration: 0.5, delay: 0.4 },
+              y: { duration: 6, repeat: Infinity, ease: "easeInOut", delay: 0.4 }
+          }}
           className="flex-1 bg-gradient-to-br from-gray-900 to-black border border-gray-800 p-8 rounded-2xl relative overflow-hidden group hover:border-red-500/50 transition-colors"
         >
           <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-30 transition-opacity">

@@ -11,8 +11,13 @@ export const LogisticsSlide: React.FC<SlideProps> = () => {
         
         <div className="space-y-8">
             <motion.div 
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, x: 50, y: 0 }}
+              animate={{ opacity: 1, x: 0, y: [0, -5, 0] }}
+              transition={{ 
+                  opacity: { duration: 0.5 },
+                  x: { duration: 0.5 },
+                  y: { duration: 4, repeat: Infinity, ease: "easeInOut" }
+              }}
               className="bg-[#111] p-6 rounded-lg border-r-4 border-green-500 shadow-[0_0_20px_rgba(0,255,0,0.1)]"
             >
                 <div className="flex items-center gap-4 mb-2">
@@ -24,9 +29,13 @@ export const LogisticsSlide: React.FC<SlideProps> = () => {
             </motion.div>
 
             <motion.div 
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.1 }}
+              initial={{ opacity: 0, x: 50, y: 0 }}
+              animate={{ opacity: 1, x: 0, y: [0, -5, 0] }}
+              transition={{ 
+                  opacity: { duration: 0.5, delay: 0.1 },
+                  x: { duration: 0.5, delay: 0.1 },
+                  y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.1 }
+              }}
               className="bg-[#111] p-6 rounded-lg border-r-4 border-green-500 shadow-[0_0_20px_rgba(0,255,0,0.1)]"
             >
                 <div className="flex items-center gap-4 mb-2">
@@ -38,9 +47,13 @@ export const LogisticsSlide: React.FC<SlideProps> = () => {
             </motion.div>
 
             <motion.div 
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 }}
+              initial={{ opacity: 0, x: 50, y: 0 }}
+              animate={{ opacity: 1, x: 0, y: [0, -5, 0] }}
+              transition={{ 
+                  opacity: { duration: 0.5, delay: 0.2 },
+                  x: { duration: 0.5, delay: 0.2 },
+                  y: { duration: 6, repeat: Infinity, ease: "easeInOut", delay: 0.2 }
+              }}
               className="bg-[#111] p-6 rounded-lg border-r-4 border-green-500 shadow-[0_0_20px_rgba(0,255,0,0.1)]"
             >
                 <div className="flex items-center gap-4 mb-2">

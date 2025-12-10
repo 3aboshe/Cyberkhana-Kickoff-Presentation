@@ -351,8 +351,13 @@ export const CategorySlide: React.FC<CategorySlideProps> = ({ title, description
       {/* Visual Side */}
       <motion.div 
         className={`flex-1 w-full bg-gradient-to-br ${bgGradient} to-black p-1 rounded-2xl relative overflow-hidden h-[400px]`}
-        initial={{ opacity: 0, x: -50 }}
-        animate={{ opacity: 1, x: 0 }}
+        initial={{ opacity: 0, x: -50, y: 0 }}
+        animate={{ opacity: 1, x: 0, y: [0, -10, 0] }}
+        transition={{ 
+            opacity: { duration: 0.5 },
+            x: { duration: 0.5 },
+            y: { duration: 6, repeat: Infinity, ease: "easeInOut" }
+        }}
       >
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/diagmonds-light.png')] opacity-10"></div>
         <div className={`bg-[#050505] p-8 rounded-xl h-full border ${borderColor} flex flex-col items-center justify-center`}>
@@ -364,9 +369,13 @@ export const CategorySlide: React.FC<CategorySlideProps> = ({ title, description
       <motion.div 
         className="flex-1 text-right" 
         dir="rtl"
-        initial={{ opacity: 0, x: 50 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.2 }}
+        initial={{ opacity: 0, x: 50, y: 0 }}
+        animate={{ opacity: 1, x: 0, y: [0, -10, 0] }}
+        transition={{ 
+            opacity: { duration: 0.5, delay: 0.2 },
+            x: { duration: 0.5, delay: 0.2 },
+            y: { duration: 6, repeat: Infinity, ease: "easeInOut", delay: 0.2 }
+        }}
       >
         <h2 className={`text-4xl md:text-5xl font-bold text-white mb-6 ${accentColor} flex items-center justify-end gap-3`}>
             {title}

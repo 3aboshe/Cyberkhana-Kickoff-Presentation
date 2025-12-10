@@ -23,9 +23,13 @@ export const ResourcesSlide: React.FC<SlideProps> = () => {
         {resources.map((res, i) => (
             <motion.div
                 key={i}
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ delay: i * 0.1 }}
+                initial={{ scale: 0, opacity: 0, y: 0 }}
+                animate={{ scale: 1, opacity: 1, y: [0, -5, 0] }}
+                transition={{ 
+                    opacity: { duration: 0.5, delay: i * 0.1 },
+                    scale: { duration: 0.5, delay: i * 0.1 },
+                    y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: i * 0.1 }
+                }}
                 className="bg-[#0a0a0a] border border-gray-800 p-8 flex items-center justify-center hover:bg-green-900/10 hover:border-green-500 transition-all cursor-crosshair group relative overflow-hidden"
             >
                 <div className="absolute top-0 left-0 w-full h-1 bg-green-500 -translate-x-full group-hover:translate-x-0 transition-transform duration-500" />

@@ -20,8 +20,13 @@ export const RequirementsSlide: React.FC<SlideProps> = () => {
 
       <motion.div 
         className="bg-red-900/20 border border-red-500/50 p-6 rounded-xl mb-12 flex items-center gap-4 w-full max-w-2xl"
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
+        initial={{ scale: 0.9, opacity: 0, y: 0 }}
+        animate={{ scale: 1, opacity: 1, y: [0, -5, 0] }}
+        transition={{ 
+            opacity: { duration: 0.5 },
+            scale: { duration: 0.5 },
+            y: { duration: 3, repeat: Infinity, ease: "easeInOut" }
+        }}
       >
         <div className="bg-red-500 p-3 rounded-full text-black animate-pulse">
             <Laptop size={32} />
@@ -37,8 +42,11 @@ export const RequirementsSlide: React.FC<SlideProps> = () => {
             <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 + (i * 0.1) }}
+                animate={{ opacity: 1, y: [0, -5, 0] }}
+                transition={{ 
+                    opacity: { duration: 0.5, delay: 0.2 + (i * 0.1) },
+                    y: { duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.2 + (i * 0.1) }
+                }}
                 className="bg-[#111] p-8 rounded-2xl border border-gray-800 hover:border-green-500 group transition-all duration-300 hover:-translate-y-2"
             >
                 <div className="w-12 h-12 bg-gray-800 rounded-lg flex items-center justify-center mb-4 text-green-500 group-hover:bg-green-500/20 transition-colors">
