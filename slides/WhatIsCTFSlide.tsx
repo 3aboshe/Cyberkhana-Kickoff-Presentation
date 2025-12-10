@@ -15,13 +15,8 @@ export const WhatIsCTFSlide: React.FC<SlideProps> = () => {
       <div className="flex flex-col md:flex-row gap-8 items-center">
         <motion.div 
           className="flex-1 text-center md:text-right"
-          initial={{ opacity: 0, x: 50, y: 0 }}
-          animate={{ opacity: 1, x: 0, y: [0, -10, 0] }}
-          transition={{ 
-              opacity: { duration: 0.5 },
-              x: { duration: 0.5 },
-              y: { duration: 6, repeat: Infinity, ease: "easeInOut" }
-          }}
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
           dir="rtl"
         >
           <h2 className="text-3xl font-bold text-white mb-6">Capture The Flag</h2>
@@ -39,13 +34,9 @@ export const WhatIsCTFSlide: React.FC<SlideProps> = () => {
 
         <motion.div 
           className="flex-1 grid grid-cols-2 gap-4"
-          initial={{ opacity: 0, x: -50, y: 0 }}
-          animate={{ opacity: 1, x: 0, y: [0, -10, 0] }}
-          transition={{ 
-              opacity: { duration: 0.5, delay: 0.3 },
-              x: { duration: 0.5, delay: 0.3 },
-              y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.3 }
-          }}
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.3 }}
         >
            <div className="bg-gray-900/50 p-6 rounded-xl border border-gray-800 flex flex-col items-center gap-4 hover:border-red-500 transition-colors">
               <Flag size={40} className="text-red-500" />

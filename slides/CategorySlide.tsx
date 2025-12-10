@@ -21,15 +21,34 @@ const SQLiVisual = () => {
 
   useEffect(() => {
     let i = 0;
-    const interval = setInterval(() => {
-      setText(payload.slice(0, i + 1));
-      i++;
-      if (i > payload.length) {
+    let interval: any;
+    let timeout: any;
+    let resetTimeout: any;
+
+    const startLoop = () => {
+        i = 0;
+        setText("");
+        setShowDb(false);
+        
+        interval = setInterval(() => {
+          setText(payload.slice(0, i + 1));
+          i++;
+          if (i > payload.length) {
+            clearInterval(interval);
+            timeout = setTimeout(() => {
+                setShowDb(true);
+                resetTimeout = setTimeout(startLoop, 3000);
+            }, 500);
+          }
+        }, 100);
+    };
+
+    startLoop();
+    return () => {
         clearInterval(interval);
-        setTimeout(() => setShowDb(true), 500);
-      }
-    }, 100);
-    return () => clearInterval(interval);
+        clearTimeout(timeout);
+        clearTimeout(resetTimeout);
+    };
   }, []);
 
   return (
@@ -145,26 +164,14 @@ const CryptoVisual = () => {
                     ease: "backOut" 
                 }}
             >
-                {items.map((hash, i) => (
-                    <div 
-                        key={i} 
-                        style={{ height: itemHeight }} 
-                        className={`flex items-center justify-center font-mono-code text-sm md:text-xl lg:text-2xl w-full transition-all duration-300 whitespace-nowrap ${
-                            i === currentIndex
-                            ? (i === targetIndex ? "text-green-400 font-bold scale-110 drop-shadow-[0_0_10px_rgba(0,255,0,0.8)]" : "text-red-500 font-bold")
-                            : "text-gray-700 blur-[2px] scale-90"
-                        }`}
-                    >
-                        {hash}
-                    </div>
-                ))}
-            </motion.div>
-        </div>
-    </div>
-  );
-};
-
 const RevEngVisual = () => {
+  const [key, setKey] = useState(0);
+  
+  useEffect(() => {
+    const interval = setInterval(() => setKey(k => k + 1), 4000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="flex gap-2 font-mono-code text-xs w-full max-w-sm h-40 overflow-hidden relative">
         {/* Binary Column */}
@@ -178,6 +185,7 @@ const RevEngVisual = () => {
         {/* Assembly Column */}
         <div className="flex-1 text-blue-400">
              <motion.div 
+               key={key}
                initial={{ opacity: 0 }}
                animate={{ opacity: 1 }}
                transition={{ duration: 2 }}
@@ -190,12 +198,38 @@ const RevEngVisual = () => {
                 <div className="text-red-500">JNE 0x401000</div>
                 <div>XOR EAX, EAX</div>
                 <div>POP EBP</div>
-                <div>RET</div>
-             </motion.div>
+const PwnVisual = () => {
+    const [key, setKey] = useState(0);
+
+    useEffect(() => {
+        const interval = setInterval(() => setKey(k => k + 1), 5000);
+        return () => clearInterval(interval);
+    }, []);
+
+    // Stack overflow visualization
+    return (
+        <div key={key} className="relative w-32 h-48 border-2 border-gray-600 rounded-b-lg border-t-0 flex flex-col-reverse items-center p-1 overflow-visible">
+            <div className="absolute -top-6 text-gray-500 text-xs font-mono-code">BUFFER</div>
+            {Array.from({length: 8}).map((_, i) => (
+                <motion.div 
+                    key={i}
+                    className="w-full h-5 bg-green-500/20 border border-green-500/50 mb-1 rounded-sm"
+                    initial={{ opacity: 0, y: -50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.3 }}
+                />
+            ))}
+            <motion.div 
+                 className="absolute -top-10 w-full h-8 bg-red-600 border border-red-400 rounded-sm z-10 flex items-center justify-center text-white font-bold text-xs"
+                 initial={{ opacity: 0, y: -100 }}
+                 animate={{ opacity: 1, y: 0, rotate: [0, 5, -5, 0] }}
+                 transition={{ delay: 2.5, duration: 0.5 }}
+            >
+                OVERFLOW
+            </motion.div>
         </div>
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black pointer-events-none"></div>
-    </div>
-  );
+    );
+};);
 };
 
 const PwnVisual = () => {
@@ -267,24 +301,16 @@ const IRVisual = () => {
                     initial={{ right: "-10%" }}
                     animate={{ right: "50%" }}
                     transition={{ duration: 1, repeat: Infinity, delay: i * 0.2, ease: "linear" }}
-                 />
-             ))}
-             
-             {/* Shield */}
-             <motion.div 
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                className="z-10 bg-blue-900/50 p-4 rounded-full border-2 border-blue-500 backdrop-blur-md"
-             >
-                 <ShieldAlert size={32} className="text-white" />
-             </motion.div>
-        </div>
-    );
-}
-
 const OSINTVisual = () => {
+    const [key, setKey] = useState(0);
+
+    useEffect(() => {
+        const interval = setInterval(() => setKey(k => k + 1), 4000);
+        return () => clearInterval(interval);
+    }, []);
+
     return (
-        <div className="relative w-48 h-48">
+        <div key={key} className="relative w-48 h-48">
              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full flex items-center justify-center z-10 border-4 border-gray-900">
                  <div className="w-8 h-8 bg-gray-300 rounded-full" />
              </div>
@@ -300,6 +326,21 @@ const OSINTVisual = () => {
              {[0, 1, 2, 3].map((i) => (
                  <motion.div 
                     key={i}
+                    className="absolute bg-blue-500 w-10 h-10 rounded-full flex items-center justify-center text-xs text-white z-10 border-2 border-black"
+                    initial={{ top: "50%", left: "50%", x: "-50%", y: "-50%", opacity: 0 }}
+                    animate={{ 
+                        top: i === 0 ? "15%" : i === 1 ? "85%" : "50%", 
+                        left: i === 2 ? "15%" : i === 3 ? "85%" : "50%",
+                        opacity: 1 
+                    }}
+                    transition={{ delay: 0.5 + (i * 0.2) }}
+                 >
+                     {i === 0 ? "@" : i === 1 ? "Loc" : i === 2 ? "IP" : "Ph"}
+                 </motion.div>
+             ))}
+        </div>
+    );
+}                   key={i}
                     className="absolute bg-blue-500 w-10 h-10 rounded-full flex items-center justify-center text-xs text-white z-10 border-2 border-black"
                     initial={{ top: "50%", left: "50%", x: "-50%", y: "-50%", opacity: 0 }}
                     animate={{ 
@@ -351,13 +392,8 @@ export const CategorySlide: React.FC<CategorySlideProps> = ({ title, description
       {/* Visual Side */}
       <motion.div 
         className={`flex-1 w-full bg-gradient-to-br ${bgGradient} to-black p-1 rounded-2xl relative overflow-hidden h-[400px]`}
-        initial={{ opacity: 0, x: -50, y: 0 }}
-        animate={{ opacity: 1, x: 0, y: [0, -10, 0] }}
-        transition={{ 
-            opacity: { duration: 0.5 },
-            x: { duration: 0.5 },
-            y: { duration: 6, repeat: Infinity, ease: "easeInOut" }
-        }}
+        initial={{ opacity: 0, x: -50 }}
+        animate={{ opacity: 1, x: 0 }}
       >
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/diagmonds-light.png')] opacity-10"></div>
         <div className={`bg-[#050505] p-8 rounded-xl h-full border ${borderColor} flex flex-col items-center justify-center`}>
@@ -369,13 +405,9 @@ export const CategorySlide: React.FC<CategorySlideProps> = ({ title, description
       <motion.div 
         className="flex-1 text-right" 
         dir="rtl"
-        initial={{ opacity: 0, x: 50, y: 0 }}
-        animate={{ opacity: 1, x: 0, y: [0, -10, 0] }}
-        transition={{ 
-            opacity: { duration: 0.5, delay: 0.2 },
-            x: { duration: 0.5, delay: 0.2 },
-            y: { duration: 6, repeat: Infinity, ease: "easeInOut", delay: 0.2 }
-        }}
+        initial={{ opacity: 0, x: 50 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.2 }}
       >
         <h2 className={`text-4xl md:text-5xl font-bold text-white mb-6 ${accentColor} flex items-center justify-end gap-3`}>
             {title}

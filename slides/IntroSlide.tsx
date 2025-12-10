@@ -12,22 +12,16 @@ export const IntroSlide: React.FC<SlideProps> = () => {
       <div className="absolute top-8 w-full flex justify-between px-8 md:px-16 z-20">
           <motion.img 
             initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: [0, -10, 0] }}
-            transition={{ 
-                opacity: { duration: 0.5, delay: 0.5 },
-                y: { duration: 4, repeat: Infinity, ease: "easeInOut" }
-            }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
             src="/images/unilogo.png"
             alt="University of Mosul" 
             className="w-20 md:w-32 h-auto drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
           />
           <motion.div
              initial={{ opacity: 0, y: -20 }}
-             animate={{ opacity: 1, y: [0, -10, 0] }}
-             transition={{ 
-                opacity: { duration: 0.5, delay: 0.7 },
-                y: { duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }
-             }}
+             animate={{ opacity: 1, y: 0 }}
+             transition={{ delay: 0.7 }}
              className="w-20 md:w-32 h-20 md:h-32 bg-purple-900/50 rounded-full flex items-center justify-center border-2 border-purple-500 shadow-[0_0_20px_purple] overflow-hidden"
           >
              {/* Placeholder for College Logo since we don't have the exact URL, user can replace src */}

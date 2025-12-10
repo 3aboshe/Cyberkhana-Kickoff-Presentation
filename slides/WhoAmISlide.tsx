@@ -10,13 +10,9 @@ export const WhoAmISlide: React.FC<SlideProps> = () => {
       
       {/* Image Section */}
       <motion.div 
-        initial={{ opacity: 0, scale: 0.8, y: 0 }}
-        animate={{ opacity: 1, scale: 1, y: [0, -15, 0] }}
-        transition={{ 
-            opacity: { duration: 0.5 },
-            scale: { duration: 0.5 },
-            y: { duration: 6, repeat: Infinity, ease: "easeInOut" }
-        }}
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5 }}
         className="w-64 h-64 md:w-80 md:h-80 relative flex-shrink-0 order-2 md:order-1"
       >
         <div className="absolute inset-0 bg-green-500 rounded-full blur-2xl opacity-20 animate-pulse"></div>
@@ -55,11 +51,8 @@ export const WhoAmISlide: React.FC<SlideProps> = () => {
         <div className="space-y-6">
             <motion.div 
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: [0, -5, 0] }}
-                transition={{ 
-                    opacity: { duration: 0.5, delay: 0.4 },
-                    y: { duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.4 }
-                }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
                 className="bg-gray-900/50 p-4 rounded-xl border border-blue-500/30 flex items-center gap-4 hover:bg-blue-900/10 transition-colors"
                 dir="ltr"
             >
@@ -74,11 +67,8 @@ export const WhoAmISlide: React.FC<SlideProps> = () => {
 
             <motion.div 
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: [0, -5, 0] }}
-                transition={{ 
-                    opacity: { duration: 0.5, delay: 0.6 },
-                    y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.6 }
-                }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 }}
                 className="bg-gray-900/50 p-4 rounded-xl border border-yellow-500/30 flex items-center gap-4 hover:bg-yellow-900/10 transition-colors"
             >
                 <div className="p-3 bg-yellow-500/20 rounded-lg text-yellow-400">
