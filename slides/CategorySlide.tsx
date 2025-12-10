@@ -87,98 +87,183 @@ const SQLiVisual = () => {
 const CryptoVisual = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isResetting, setIsResetting] = useState(false);
+  const [isRunning, setIsRunning] = useState(false);
 
-  const itemHeight = 80; 
-  const containerHeight = 240; 
-  
-  // Create a list of hashes, last one is correct
-  const items = React.useMemo(() => {
-      const arr = [
-          "a8f5f167f44f4964e6c998dee827110c", // Wrong
-          "d41d8cd98f00b204e9800998ecf8427e", // Wrong
-          "e10adc3949ba59abbe56e057f20f883e", // Wrong
-          "78e731027d8fd50ed642340b7c9a63b3"  // Correct (Example for Qwert123)
-      ];
-      return arr;
-  }, []);
+  // Password attempts and their hashes
+  const passwordAttempts = React.useMemo(() => [
+      { password: "admin", hash: "21232f297a57a5a743894a0e4a801fc3", correct: false },
+      { password: "password", hash: "5f4dcc3b5aa765d61d8327deb882cf99", correct: false },
+      { password: "12345", hash: "827ccb0eea8a706c4c34a16891f84e7b", correct: false },
+      { password: "abc123", hash: "e99a18c428cb38d5f260853678922e03", correct: false },
+      { password: "qwerty", hash: "d8578edf8458ce06fbc5bb76a58c5ca4", correct: false },
+      { password: "letmein", hash: "0d107d09f5bbe40cade3de5c71e9e9b7", correct: false },
+      { password: "monkey", hash: "8d4c05f1d4f3e0d0eaa4f0e5b3e0d7d0", correct: false },
+      { password: "Qwert123", hash: "78e731027d8fd50ed642340b7c9a63b3", correct: true }
+  ], []);
 
-  const targetIndex = items.length - 1;
+  const targetHash = "78e731027d8fd50ed642340b7c9a63b3";
+  const itemHeight = 70;
+  const containerHeight = 210;
 
   useEffect(() => {
+      if (!isRunning) return;
+
       let timer: ReturnType<typeof setTimeout>;
 
       if (isResetting) {
-           // Wait before restarting loop
            timer = setTimeout(() => {
                setIsResetting(false);
                setCurrentIndex(0);
-           }, 500); 
+           }, 800); 
            return () => clearTimeout(timer);
       }
 
-      // Step logic
-      if (currentIndex < targetIndex) {
-          // Move to next wrong hash after delay
+      if (currentIndex < passwordAttempts.length - 1) {
           timer = setTimeout(() => {
               setCurrentIndex(prev => prev + 1);
-          }, 800); // Slow step
-      } else {
-          // Found correct hash, hold then reset
+          }, 700);
+      } else if (currentIndex === passwordAttempts.length - 1) {
           timer = setTimeout(() => {
               setIsResetting(true);
-          }, 3000); // Hold success for 3s
+          }, 3000);
       }
 
       return () => clearTimeout(timer);
-  }, [currentIndex, isResetting, targetIndex]);
+  }, [currentIndex, isResetting, passwordAttempts.length, isRunning]);
 
-  // Determine if current visible item is correct
-  const isSuccess = currentIndex === targetIndex && !isResetting;
+  const currentAttempt = passwordAttempts[currentIndex];
+  const isSuccess = currentAttempt?.correct && !isResetting;
+
+  const handleStart = () => {
+      setIsRunning(true);
+      setCurrentIndex(0);
+      setIsResetting(false);
+  };
 
   return (
-    <div className="flex flex-col gap-4 w-full px-4 items-center">
-        {/* Top: Equation */}
-        <div className="flex items-center justify-center gap-4 w-full">
-            <div className="text-2xl md:text-3xl font-bold text-white font-mono-code whitespace-nowrap tracking-wider">Qwert123</div>
-            <div className="text-2xl md:text-3xl font-bold text-gray-500">=</div>
+    <div className="flex flex-col gap-6 w-full px-2 items-center justify-center">
+        {/* Target Hash - Large Display */}
+        <div className="flex flex-col items-center gap-3">
+            <div className="text-sm text-gray-400 uppercase tracking-widest">Target Hash (MD5)</div>
+            <div className="text-2xl md:text-3xl font-mono-code text-yellow-400 bg-gray-900/80 px-8 py-4 rounded-lg border-2 border-yellow-600/50 shadow-[0_0_30px_rgba(234,179,8,0.2)]">
+                {targetHash}
+            </div>
         </div>
-        
-        {/* Bottom: The Wheel */}
-        <div className="relative w-full h-[240px] bg-black border-4 border-gray-800 rounded-xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)]">
-            
-            {/* Gradients for depth */}
-            <div className="absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-black via-black/90 to-transparent z-20 pointer-events-none"></div>
-            <div className="absolute bottom-0 left-0 w-full h-20 bg-gradient-to-t from-black via-black/90 to-transparent z-20 pointer-events-none"></div>
-            
-            {/* Selection Highlighter */}
-            <div className={`absolute top-1/2 left-0 right-0 h-[80px] -mt-[40px] border-y-4 transition-colors duration-300 z-10 pointer-events-none ${isSuccess ? 'border-green-500 bg-green-500/10 shadow-[0_0_30px_rgba(34,197,94,0.4)]' : 'border-red-500/50 bg-red-500/5'}`}></div>
 
-            <motion.div
-                className="w-full flex flex-col items-center"
-                initial={{ y: 0 }}
-                animate={{ 
-                    y: isResetting ? 240 : - (currentIndex * itemHeight) + (containerHeight/2 - itemHeight/2)
-                }} 
-                transition={{ 
-                    duration: isResetting ? 0 : 0.5, 
-                    ease: "backOut" 
-                }}
+        {/* Start Button */}
+        {!isRunning && (
+            <motion.button
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={handleStart}
+                className="px-8 py-3 bg-red-600 hover:bg-red-500 text-white font-bold rounded-lg border-2 border-red-400 shadow-[0_0_20px_rgba(220,38,38,0.4)] transition-all"
             >
-                {items.map((hash, i) => (
-                    <div 
-                        key={i} 
-                        style={{ height: itemHeight }} 
-                        className={`flex items-center justify-center font-mono-code text-sm md:text-xl lg:text-2xl w-full transition-all duration-300 whitespace-nowrap ${
-                            i === currentIndex
-                            ? (i === targetIndex ? "text-green-400 font-bold scale-110 drop-shadow-[0_0_10px_rgba(0,255,0,0.8)]" : "text-red-500 font-bold")
-                            : "text-gray-700 blur-[2px] scale-90"
-                        }`}
-                    >
-                        {hash}
+                START BRUTE FORCE
+            </motion.button>
+        )}
+
+        {/* Wheels - Only show when running */}
+        {isRunning && (
+            <div className="flex gap-4 w-full items-center justify-center">
+                {/* Password Wheel */}
+                <div className="flex flex-col items-center gap-2">
+                    <div className="text-xs text-gray-500 uppercase tracking-wider">Password</div>
+                    <div className="relative w-52 h-[210px] bg-gradient-to-b from-gray-950 via-black to-gray-950 border-2 border-gray-700 rounded-xl overflow-hidden">
+                        {/* Fade gradients */}
+                        <div className="absolute top-0 left-0 w-full h-16 bg-gradient-to-b from-black via-black/80 to-transparent z-20 pointer-events-none"></div>
+                        <div className="absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t from-black via-black/80 to-transparent z-20 pointer-events-none"></div>
+                        
+                        {/* Selection highlight */}
+                        <div className="absolute top-1/2 left-0 right-0 h-[70px] -mt-[35px] bg-blue-500/10 border-y-2 border-blue-500/50 z-10 pointer-events-none"></div>
+
+                        <motion.div
+                            className="w-full flex flex-col items-center"
+                            animate={{ 
+                                y: isResetting ? containerHeight : -(currentIndex * itemHeight) + (containerHeight/2 - itemHeight/2)
+                            }} 
+                            transition={{ 
+                                duration: isResetting ? 0 : 0.6, 
+                                ease: "easeInOut" 
+                            }}
+                        >
+                            {passwordAttempts.map((item, i) => (
+                                <div 
+                                    key={i} 
+                                    style={{ height: itemHeight }} 
+                                    className={`flex items-center justify-center font-mono-code text-xl w-full transition-all duration-300 px-2 ${
+                                        i === currentIndex
+                                        ? "text-white font-bold scale-105" 
+                                        : "text-gray-600 scale-90 blur-[1px]"
+                                    }`}
+                                >
+                                    {item.password}
+                                </div>
+                            ))}
+                        </motion.div>
                     </div>
-                ))}
-            </motion.div>
-        </div>
+                </div>
+
+                {/* Arrow */}
+                <div className="text-gray-500 text-3xl mt-8">→</div>
+
+                {/* Hash Wheel */}
+                <div className="flex flex-col items-center gap-2">
+                    <div className="text-xs text-gray-500 uppercase tracking-wider">Hash (MD5)</div>
+                    <div className="relative w-96 h-[210px] bg-gradient-to-b from-gray-950 via-black to-gray-950 border-2 border-gray-700 rounded-xl overflow-hidden">
+                        {/* Fade gradients */}
+                        <div className="absolute top-0 left-0 w-full h-16 bg-gradient-to-b from-black via-black/80 to-transparent z-20 pointer-events-none"></div>
+                        <div className="absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t from-black via-black/80 to-transparent z-20 pointer-events-none"></div>
+                        
+                        {/* Selection highlight - changes color on match */}
+                        <div className={`absolute top-1/2 left-0 right-0 h-[70px] -mt-[35px] border-y-2 z-10 pointer-events-none transition-all duration-300 ${
+                            isSuccess 
+                            ? "bg-green-500/20 border-green-500 shadow-[inset_0_0_30px_rgba(34,197,94,0.3)]" 
+                            : "bg-red-500/5 border-red-500/50"
+                        }`}></div>
+
+                        <motion.div
+                            className="w-full flex flex-col items-center"
+                            animate={{ 
+                                y: isResetting ? containerHeight : -(currentIndex * itemHeight) + (containerHeight/2 - itemHeight/2)
+                            }} 
+                            transition={{ 
+                                duration: isResetting ? 0 : 0.6, 
+                                ease: "easeInOut" 
+                            }}
+                        >
+                            {passwordAttempts.map((item, i) => (
+                                <div 
+                                    key={i} 
+                                    style={{ height: itemHeight }} 
+                                    className={`flex items-center justify-center font-mono-code text-base w-full transition-all duration-300 px-6 ${
+                                        i === currentIndex
+                                        ? (item.correct 
+                                            ? "text-green-400 font-bold scale-105 drop-shadow-[0_0_10px_rgba(34,197,94,0.8)]" 
+                                            : "text-red-400 font-bold scale-105")
+                                        : "text-gray-600 scale-90 blur-[1px]"
+                                    }`}
+                                >
+                                    {item.hash}
+                                </div>
+                            ))}
+                        </motion.div>
+
+                        {/* Success indicator */}
+                        {isSuccess && (
+                            <motion.div
+                                initial={{ scale: 0, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                className="absolute top-2 right-2 text-green-400 font-bold text-sm z-30"
+                            >
+                                ✓ MATCH!
+                            </motion.div>
+                        )}
+                    </div>
+                </div>
+            </div>
+        )}
     </div>
   );
 };
@@ -259,24 +344,6 @@ const PwnVisual = () => {
 };
 
 const ForensicsVisual = () => {
-                    initial={{ opacity: 0, y: -50 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.3 }}
-                />
-            ))}
-            <motion.div 
-                 className="absolute -top-10 w-full h-8 bg-red-600 border border-red-400 rounded-sm z-10 flex items-center justify-center text-white font-bold text-xs"
-                 initial={{ opacity: 0, y: -100 }}
-                 animate={{ opacity: 1, y: 0, rotate: [0, 5, -5, 0] }}
-                 transition={{ delay: 2.5, duration: 0.5 }}
-            >
-                OVERFLOW
-            </motion.div>
-        </div>
-    );
-};
-
-const ForensicsVisual = () => {
     // Grid of dots with magnifying glass
     return (
         <div className="relative w-48 h-48 bg-black grid grid-cols-8 gap-1 p-2 rounded border border-gray-800">
@@ -319,6 +386,12 @@ const IRVisual = () => {
                     initial={{ right: "-10%" }}
                     animate={{ right: "50%" }}
                     transition={{ duration: 1, repeat: Infinity, delay: i * 0.2, ease: "linear" }}
+                 />
+             ))}
+        </div>
+    );
+};
+
 const OSINTVisual = () => {
     const [key, setKey] = useState(0);
 
@@ -358,22 +431,7 @@ const OSINTVisual = () => {
              ))}
         </div>
     );
-}                   key={i}
-                    className="absolute bg-blue-500 w-10 h-10 rounded-full flex items-center justify-center text-xs text-white z-10 border-2 border-black"
-                    initial={{ top: "50%", left: "50%", x: "-50%", y: "-50%", opacity: 0 }}
-                    animate={{ 
-                        top: i === 0 ? "15%" : i === 1 ? "85%" : "50%", 
-                        left: i === 2 ? "15%" : i === 3 ? "85%" : "50%",
-                        opacity: 1 
-                    }}
-                    transition={{ delay: 0.5 + (i * 0.2) }}
-                 >
-                     {i === 0 ? "@" : i === 1 ? "Loc" : i === 2 ? "IP" : "Ph"}
-                 </motion.div>
-             ))}
-        </div>
-    );
-}
+};
 
 // -------------------------
 
@@ -409,12 +467,11 @@ export const CategorySlide: React.FC<CategorySlideProps> = ({ title, description
       
       {/* Visual Side */}
       <motion.div 
-        className={`flex-1 w-full bg-gradient-to-br ${bgGradient} to-black p-1 rounded-2xl relative overflow-hidden h-[400px]`}
+        className={`flex-1 w-full bg-gradient-to-br ${bgGradient} to-black p-1 rounded-2xl relative overflow-visible h-[400px]`}
         initial={{ opacity: 0, x: -50 }}
         animate={{ opacity: 1, x: 0 }}
       >
-        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/diagmonds-light.png')] opacity-10"></div>
-        <div className={`bg-[#050505] p-8 rounded-xl h-full border ${borderColor} flex flex-col items-center justify-center`}>
+        <div className="bg-[#050505] p-4 rounded-xl h-full flex flex-col items-center justify-center overflow-visible">
             {renderVisual()}
         </div>
       </motion.div>
