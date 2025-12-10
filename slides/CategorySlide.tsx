@@ -217,6 +217,14 @@ const RevEngVisual = () => {
                 <div className="text-red-500">JNE 0x401000</div>
                 <div>XOR EAX, EAX</div>
                 <div>POP EBP</div>
+                <div>RET</div>
+             </motion.div>
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black pointer-events-none"></div>
+    </div>
+  );
+};
+
 const PwnVisual = () => {
     const [key, setKey] = useState(0);
 
