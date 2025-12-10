@@ -256,18 +256,9 @@ const PwnVisual = () => {
             </motion.div>
         </div>
     );
-};);
 };
 
-const PwnVisual = () => {
-    // Stack overflow visualization
-    return (
-        <div className="relative w-32 h-48 border-2 border-gray-600 rounded-b-lg border-t-0 flex flex-col-reverse items-center p-1 overflow-visible">
-            <div className="absolute -top-6 text-gray-500 text-xs font-mono-code">BUFFER</div>
-            {Array.from({length: 8}).map((_, i) => (
-                <motion.div 
-                    key={i}
-                    className="w-full h-5 bg-green-500/20 border border-green-500/50 mb-1 rounded-sm"
+const ForensicsVisual = () => {
                     initial={{ opacity: 0, y: -50 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.3 }}
