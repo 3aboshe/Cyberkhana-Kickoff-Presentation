@@ -164,6 +164,25 @@ const CryptoVisual = () => {
                     ease: "backOut" 
                 }}
             >
+                {items.map((hash, i) => (
+                    <div 
+                        key={i} 
+                        style={{ height: itemHeight }} 
+                        className={`flex items-center justify-center font-mono-code text-sm md:text-xl lg:text-2xl w-full transition-all duration-300 whitespace-nowrap ${
+                            i === currentIndex
+                            ? (i === targetIndex ? "text-green-400 font-bold scale-110 drop-shadow-[0_0_10px_rgba(0,255,0,0.8)]" : "text-red-500 font-bold")
+                            : "text-gray-700 blur-[2px] scale-90"
+                        }`}
+                    >
+                        {hash}
+                    </div>
+                ))}
+            </motion.div>
+        </div>
+    </div>
+  );
+};
+
 const RevEngVisual = () => {
   const [key, setKey] = useState(0);
   
